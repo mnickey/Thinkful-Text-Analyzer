@@ -2,33 +2,38 @@
 function splitText(text) {
     var regex = /[^a-zA-Z]\n/gmyu;
     var subst = ` `;
-    text = text.replace(regex, subst);
+    text = text.replace(/[^a-zA-Z]\n/gmyu, ' ');
     // console.log(text);
     return text.length;
 }
 
+function textToTokens(text) {
+    console.log("Creating tokens...");
+    text = text.toLowerCase().split(/[ ,!.";:-]+/).sort();
+    console.log(text);
+    console.log(text.toString().split( /(\r\n|\n|\r)/gm," " ));
+    return text;
+}
 
-// function uniqueWords(text) {
-//     var uniqueWord = [];
-//     for (var i = 0; i < cleanText(text).length; i++) {
-//         if (uniqueWord.indexOf(cleanText(text)[i]) === -1) {
-//             uniqueWord.push(cleanText(text)[i]);
-//         }
-//     }
-//     console.log("Unique words: " + uniqueWord);
-// }
+function uniqueWords(text) {
+    var uniqueWord = new Set(cleanText(text));
+    console.log('Unique Words: ' + uniqueWord.length);
+    return uniqueWord;
+}
 
 // generate report
 function report(text) {
     var wordCount = splitText(text);
-    // var uniqueWords = uniqueWords(text);
     $('.js-report').find($(".js-word-count").text(wordCount));
+    var tokens = textToTokens(text);
+    var uniqueWord = uniqueWords(tokens);
+    $('.js-report').find($('.js-unique-words').text(uniqueWord.length));
     $('.js-report').removeClass('hidden');
 }
 
 // clean entered text of newlines & carriage returns
 function cleanText(text) {
-    return text.replace(/\r?\n|\r/g, "");
+    return text.toString().replace(/\r?\n|\r/g, "");
 }
 
 // watch form submission
