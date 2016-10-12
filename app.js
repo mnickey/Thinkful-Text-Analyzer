@@ -3,7 +3,7 @@ function splitText(text) {
     var regex = /[^a-zA-Z]\n/gmyu;
     var subst = ` `;
     text = text.replace(/[^a-zA-Z]\n/gmyu, ' ');
-    // console.log(text);
+    console.log(text);
     return text.length;
 }
 
