@@ -25,6 +25,13 @@ function wordCount(enteredText) {
     return count;
 }
 
+// find the average length of sentences entered
+function averageSentenceLength(text) {
+    var sentence = text.split('\n');
+    return (letterCount(text) / sentence.length);
+}
+
+// find the average length of the text entered
 function avgWords(text) {
     // console.log(letterCount(text).toFixed(2) / wordCount(text).toFixed(2));
     return (letterCount(text) / wordCount(text)).toFixed(2);
@@ -34,6 +41,7 @@ function avgWords(text) {
 // Count the number of letters
 function letterCount(text) {
     var letters = wordsOnly(text).replace(/\s/g, "");
+    console.log(letters);
     return(letters.length);
 }
 
@@ -56,6 +64,7 @@ function submitForm() {
         renderHtml(wordCount(enteredText), '.js-word-count');
         renderHtml(uniqueWords(enteredText), '.js-unique-words');
         renderHtml(avgWords(enteredText), '.js-avg-word-length');
+        renderHtml(averageSentenceLength(enteredText), '.js-avg-sentence-length');
         $("dl").removeClass("hidden");
     });
 }
