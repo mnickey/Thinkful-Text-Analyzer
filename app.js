@@ -1,55 +1,53 @@
-// split text into words array for word count
-function splitText(text) {
-    var regex = /[^a-zA-Z]\n/gmyu;
-    var subst = ` `;
-    text = text.replace(/[^a-zA-Z]\n/gmyu, ' ');
-    console.log(text);
-    return text.length;
-}
-
-function textToTokens(text) {
-    console.log("Creating tokens...");
-    text = text.toLowerCase().split(/[ ,!.";:-]+/).sort();
-    console.log(text);
-    console.log(text.toString().split( /(\r\n|\n|\r)/gm," " ));
-    return text;
-}
-
+// create a map of all the unique words
 function uniqueWords(text) {
-    var uniqueWord = new Set(cleanText(text));
-    console.log('Unique Words: ' + uniqueWord.length);
-    return uniqueWord;
+    var uniqueWords = [];
+    text = wordsOnly(text).replace(/\s/g, ',').trim().split(',');
+    for (i = 0; i < text.length; i++) {
+        if (uniqueWords.indexOf(text[i]) <= -1) {
+            if (text[i].length > 0) {
+                uniqueWords.push(text[i]);
+            }
+        }
+    }
+    // console.log(uniqueWords);
+    return uniqueWords.length;
 }
 
-// generate report
-function report(text) {
-    var wordCount = splitText(text);
-    $('.js-report').find($(".js-word-count").text(wordCount));
-    var tokens = textToTokens(text);
-    var uniqueWord = uniqueWords(tokens);
-    $('.js-report').find($('.js-unique-words').text(uniqueWord.length));
-    $('.js-report').removeClass('hidden');
+// Create a count of all words by creating an array and counting the elements that are not blank.
+function wordCount(enteredText) {
+    var words = wordsOnly(enteredText).replace(/\s/g, ',').trim().split(',');
+    count = 0;
+    for (i = 0; i < words.length; i++) {
+        if (words[i] !== "") {
+            count += 1;
+        }
+    }
+    return count;
 }
 
-// clean entered text of newlines & carriage returns
-function cleanText(text) {
-    return text.toString().replace(/\r?\n|\r/g, "");
+// HELPER FUNCTIONS
+// populate the html
+function renderHtml(value, selector) {
+    $(selector).text(value);
+}
+
+// create a string from text that has no punctuation
+function wordsOnly(text) {
+    return text.replace(/[(),^\n]/g, ' ');
 }
 
 // watch form submission
 function submitForm() {
-    // console.log("In the submit form function");
     $('.js-form').submit(function (event) {
         event.preventDefault();
-        // get text
         var enteredText = $(this).find('#user-text').val();
-        enteredText = cleanText(enteredText);
-        report(enteredText);
+        renderHtml(wordCount(enteredText), '.js-word-count');
+        renderHtml(uniqueWords(enteredText), '.js-unique-words');
+        $("dl").removeClass("hidden");
     });
 }
 
 // initalize the document
 $(document).ready(function () {
-    // console.log( "ready!" );
     submitForm();
 });
